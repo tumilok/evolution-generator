@@ -40,18 +40,10 @@ public class Animal implements IMapElement {
 		}
 	}
 
-	/*
 	public void changeDirection(MoveDirection direction){
-		if (direction == MoveDirection.One){
-			this.direction = this.direction
-		}
-
-		if (direction == MoveDirection.RIGHT) {
-            this.direction = this.direction.next();
-        } else if (direction == MoveDirection.LEFT) {
-            this.direction = this.direction.previous();
-        } else {
-	}*/
+		for (int i = 0; i < direction.toInt(); i++)
+			this.direction = this.direction.next();
+	}
 	
 	public void move() {
 		Vector2d oldPosition = this.position;

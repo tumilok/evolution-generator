@@ -16,7 +16,7 @@ public class WorldMap implements IPositionChangeObserver {
 
     public boolean place(Animal animal) {
         if (!animal.getPosition().precedes(upperRight) || !animal.getPosition().follows(lowerLeft)) {
-            throw new IllegalArgumentException("Position is occupied");
+            throw new IllegalArgumentException("Out of borders");
         }
 
         this.animalsCords.put(animal.getPosition(), animal);
@@ -29,7 +29,7 @@ public class WorldMap implements IPositionChangeObserver {
     public IMapElement objectAt(Vector2d position) {
         return animalsCords.get(position);
     }
-
+    // Only for MapVisualizer
     public boolean isOccupied(Vector2d position) {
         return animalsCords.containsKey(position);
     }
