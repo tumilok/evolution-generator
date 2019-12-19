@@ -74,9 +74,9 @@ public class MapVisualizer {
         if (this.map.isOccupied(currentPosition)) {
             Object object = this.map.objectAt(currentPosition);
             if (object != null) {
-                result = object.toString();
+                result = "" + map.getAnimals().get(currentPosition).size();
             } else {
-                result = EMPTY_CELL;
+                result = "*";
             }
         } else {
             result = EMPTY_CELL;

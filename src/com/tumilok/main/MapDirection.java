@@ -1,5 +1,7 @@
 package com.tumilok.main;
 
+import java.util.Map;
+
 public enum MapDirection {
 	NORTH,
 	NORTH_EAST,
@@ -28,6 +30,29 @@ public enum MapDirection {
 				return "EAST";
 			case WEST:
 				return "WEST";
+			default:
+				return null;
+		}
+	}
+
+	public MapDirection toMapDirection(int number) {
+		switch(number) {
+			case 0:
+				return MapDirection.NORTH;
+			case 1:
+				return MapDirection.NORTH_EAST;
+			case 2:
+				return MapDirection.EAST;
+			case 3:
+				return MapDirection.SOUTH_EAST;
+			case 4:
+				return MapDirection.SOUTH;
+			case 5:
+				return MapDirection.SOUTH_WEST;
+			case 6:
+				return MapDirection.WEST;
+			case 7:
+				return MapDirection.NORTH_WEST;
 			default:
 				return null;
 		}

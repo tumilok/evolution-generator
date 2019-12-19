@@ -3,20 +3,35 @@ package com.tumilok.main;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Animal implements IMapElement {
+public class Animal {
 
 	private MapDirection direction;
 	private Vector2d position;
+	public int energy;
 	private WorldMap map;
 	private List<IPositionChangeObserver> observers;
+	private Genes genes;
 	
-	public Animal(WorldMap map, Vector2d initialPosition) {
-		direction = MapDirection.NORTH;
+	public Animal(WorldMap map, Vector2d initialPosition, int energy) {
+		int directionNumber = (int) (Math.random() * (8));
+		direction = MapDirection.NORTH.toMapDirection(directionNumber);
 		position = initialPosition;
 		this.map = map;
 		this.observers = new ArrayList<>();
+		this.energy = energy;
+		this.genes = new Genes();
 	}
-	
+
+	public Animal(WorldMap map, Vector2d initialPosition, int energy, int[] genes) {
+		int directionNumber = (int) (Math.random() * (8));
+		direction = MapDirection.NORTH.toMapDirection(directionNumber);
+		position = initialPosition;
+		this.map = map;
+		this.observers = new ArrayList<>();
+		this.energy = energy;
+		this.genes = new Genes(genes);
+	}
+
 	public String toString() {
 		switch(direction) {
 			case NORTH:
@@ -40,16 +55,22 @@ public class Animal implements IMapElement {
 		}
 	}
 
-	public void changeDirection(MoveDirection direction){
-		for (int i = 0; i < direction.toInt(); i++)
+	public boolean equalsByEnergy(Animal other) {
+		if (this != other)
+			if (this.energy == other.energy)
+				return true;
+		return false;
+	}
+
+	public void changeDirection(){
+		for (int i = 0; i < this.genes.chooseDirection(); i++)
 			this.direction = this.direction.next();
 	}
 	
 	public void move() {
 		Vector2d oldPosition = this.position;
 
-		Vector2d moveCords = this.direction.toUnitVector();
-		moveCords = this.position.add(moveCords);
+		Vector2d moveCords = this.position.add(this.direction.toUnitVector());
 
 		if (moveCords.getX() > map.upperRight.getX()){
 			moveCords = new Vector2d(map.lowerLeft.getX(), moveCords.getY());
@@ -65,7 +86,15 @@ public class Animal implements IMapElement {
 		}
 
 		this.position = moveCords;
-		positionChanged(oldPosition);
+		this.positionChanged(oldPosition);
+		this.energy -= map.energyCostOfMove;
+	}
+
+	public Animal healthier(Animal thatAnimal) {
+		if (this.energy >= thatAnimal.energy)
+			return this;
+		else
+			return thatAnimal;
 	}
 	
 	public MapDirection getDirection() {
@@ -74,6 +103,10 @@ public class Animal implements IMapElement {
 	
 	public Vector2d getPosition() {
 		return position;
+	}
+
+	public int[] getGenes() {
+		return this.genes.genes;
 	}
 	
 	public void addObserver(IPositionChangeObserver observer) {
@@ -85,10 +118,8 @@ public class Animal implements IMapElement {
 	}
 	
 	private void positionChanged(Vector2d oldPosition) {
-		for (IPositionChangeObserver obs : this.observers) {
-			obs.positionChanged(oldPosition, this.position);
+		for (IPositionChangeObserver observer : this.observers) {
+			observer.positionChanged(oldPosition, this.position, this);
 		}
 	}
-	
-
 }
