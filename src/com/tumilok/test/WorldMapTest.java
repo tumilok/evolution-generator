@@ -10,10 +10,10 @@ public class WorldMapTest {
 
     @Test
     void testPlace() {
-        WorldMap map = new WorldMap();
+        WorldMap map = new WorldMap(100, 100, 0.2, 2, 10);
 
-        Animal animal1 = new Animal(map, new Vector2d(0, 0));
-        Animal animal2 = new Animal(map, new Vector2d(0, 0));
+        Animal animal1 = new Animal(map, new Vector2d(0, 0), 100);
+        Animal animal2 = new Animal(map, new Vector2d(0, 0), 100);
 
         Assertions.assertTrue(map.place(animal1));
         Assertions.assertTrue(map.place(animal2));
