@@ -1,0 +1,12 @@
+[
+    {
+        "map": {
+        	"width": "20",
+            	"height": "20",
+            	"startEnergy": "1000",
+		"moveEnergy": "2",
+		"plantEnergy": "10",
+		"jungleRatio": "0.2"
+        }
+    }
+]
