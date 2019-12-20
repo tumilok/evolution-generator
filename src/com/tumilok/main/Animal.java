@@ -7,18 +7,18 @@ public class Animal {
 
 	private MapDirection direction;
 	private Vector2d position;
-	public int energy;
+	private int energy;
 	private WorldMap map;
 	private List<IPositionChangeObserver> observers;
 	private Genes genes;
 	
-	public Animal(WorldMap map, Vector2d initialPosition, int energy) {
+	public Animal(WorldMap map, Vector2d initialPosition, int startEnergy) {
 		int directionNumber = (int) (Math.random() * (8));
-		direction = MapDirection.NORTH.toMapDirection(directionNumber);
-		position = initialPosition;
+		this.direction = MapDirection.NORTH.toMapDirection(directionNumber);
+		this.position = initialPosition;
 		this.map = map;
 		this.observers = new ArrayList<>();
-		this.energy = energy;
+		this.energy = startEnergy;
 		this.genes = new Genes();
 	}
 
@@ -72,22 +72,22 @@ public class Animal {
 
 		Vector2d moveCords = this.position.add(this.direction.toUnitVector());
 
-		if (moveCords.getX() > map.upperRight.getX()){
-			moveCords = new Vector2d(map.lowerLeft.getX(), moveCords.getY());
+		if (moveCords.getX() > map.getUpperRight().getX()){
+			moveCords = new Vector2d(map.getLowerLeft().getX(), moveCords.getY());
 		}
-		if (moveCords.getX() < map.lowerLeft.getX()){
-			moveCords = new Vector2d(map.upperRight.getX(), moveCords.getY());
+		if (moveCords.getX() < map.getLowerLeft().getX()){
+			moveCords = new Vector2d(map.getUpperRight().getX(), moveCords.getY());
 		}
-		if (moveCords.getY() > map.upperRight.getY()){
-			moveCords = new Vector2d(moveCords.getX(), map.lowerLeft.getY());
+		if (moveCords.getY() > map.getUpperRight().getY()){
+			moveCords = new Vector2d(moveCords.getX(), map.getLowerLeft().getY());
 		}
-		if (moveCords.getY() < map.lowerLeft.getY()){
-			moveCords = new Vector2d(moveCords.getX(), map.upperRight.getY());
+		if (moveCords.getY() < map.getLowerLeft().getY()){
+			moveCords = new Vector2d(moveCords.getX(), map.getUpperRight().getY());
 		}
 
 		this.position = moveCords;
 		this.positionChanged(oldPosition);
-		this.energy -= map.energyCostOfMove;
+		this.energy -= map.moveEnergy;
 	}
 
 	public Animal healthier(Animal thatAnimal) {
@@ -95,18 +95,6 @@ public class Animal {
 			return this;
 		else
 			return thatAnimal;
-	}
-	
-	public MapDirection getDirection() {
-		return direction;
-	}
-	
-	public Vector2d getPosition() {
-		return position;
-	}
-
-	public int[] getGenes() {
-		return this.genes.genes;
 	}
 	
 	public void addObserver(IPositionChangeObserver observer) {
@@ -121,5 +109,25 @@ public class Animal {
 		for (IPositionChangeObserver observer : this.observers) {
 			observer.positionChanged(oldPosition, this.position, this);
 		}
+	}
+
+	public void setEnergy(int energy) {
+		this.energy = energy;
+	}
+
+	public int getEnergy() {
+		return this.energy;
+	}
+
+	public MapDirection getDirection() {
+		return this.direction;
+	}
+
+	public Vector2d getPosition() {
+		return this.position;
+	}
+
+	public int[] getGenes() {
+		return this.genes.getGenes();
 	}
 }

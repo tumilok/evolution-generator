@@ -3,23 +3,24 @@ package com.tumilok.main;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 public class Simulation implements ActionListener{
 
-    int delay = 1000;
-    WorldMap map;
-    Timer timer;
+    private int delay;
+    private int startEnergy;
+    private WorldMap map;
+    private Timer timer;
 
-    public Simulation() {
-        map = new WorldMap(40, 40, 0.2, 2, 10);
-        timer = new Timer(1000, this);
+    public Simulation(WorldMap map, int startEnergy, int startNumberOfAnimals, int delay) {
+        this.delay = delay;
+        this.startEnergy = startEnergy;
+        this.map = map;
+        this.timer = new Timer(delay, this);
 
-        map.place(new Animal(map, new Vector2d(3, 6), 100));
-        map.place(new Animal(map, new Vector2d(35, 7), 100));
-        map.place(new Animal(map, new Vector2d(20, 20), 100));
-        map.place(new Animal(map, new Vector2d(0, 0), 100));
-        map.place(new Animal(map, new Vector2d(0, 0), 100));
+        for (int i = 0; i < startNumberOfAnimals; i++) {
+            map.place(new Animal(map, new Vector2d((int) (Math.random() * map.getWidth()),
+                    (int) (Math.random() * map.getHeight())), startEnergy));
+        }
     }
 
     public void startTimer() {
@@ -41,7 +42,6 @@ public class Simulation implements ActionListener{
             for (Animal animal : map.getAnimalsAndCords()) {
                 animal.changeDirection();
                 animal.move();
-                System.out.println(animal.energy);
             }
             map.eatGrass();
             map.generateGrass();

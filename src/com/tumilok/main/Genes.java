@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Genes {
 
     private final int genesNumber = 32;
-    int [] genes = new int[genesNumber];
+    private final int [] genes = new int[genesNumber];
 
     public Genes() {
         for (int i = 0; i < this.genesNumber; i++) {
@@ -27,12 +27,16 @@ public class Genes {
     public String toString() {
         String toReturn = "";
         for (int i = 0; i < this.genesNumber; i++) {
-            toReturn += this.genes + " ";
+            toReturn += " " + this.genes[i];
         }
         return toReturn;
     }
 
     public int chooseDirection() {
         return genes[(int)(Math.random() * 32)];
+    }
+
+    public int [] getGenes() {
+        return this.genes;
     }
 }

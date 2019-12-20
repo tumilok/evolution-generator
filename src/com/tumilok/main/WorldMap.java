@@ -3,12 +3,14 @@ package com.tumilok.main;
 import java.util.*;
 
 public class WorldMap implements IPositionChangeObserver {
-    final Vector2d lowerLeft;
-    final Vector2d upperRight;
-    final Vector2d jungleLowerLeft;
-    final Vector2d jungleUpperRight;
-    public final int energyCostOfMove;
-    public final int energyFromFood;
+    private final Vector2d lowerLeft;
+    private final Vector2d upperRight;
+    private final Vector2d jungleLowerLeft;
+    private final Vector2d jungleUpperRight;
+    private final int width;
+    private final int height;
+    public final int moveEnergy;
+    public final int plantEnergy;
     private int maxSteppeGrass;
     private int maxJungleGrass;
 
@@ -19,14 +21,16 @@ public class WorldMap implements IPositionChangeObserver {
 
     private MapVisualizer picture = new MapVisualizer(this);
 
-    public WorldMap(int width, int height, double jugnleRatio, int energyCostOfMove, int energyFromFood) {
+    public WorldMap(int width, int height, int moveEnergy, int plantEnergy, double jungleRatio) {
+        this.width = width;
+        this.height = height;
         this.lowerLeft = new Vector2d(0, 0);
         this.upperRight = new Vector2d(width - 1, height - 1);
-        this.jungleLowerLeft = new Vector2d((width - (int)(width*jugnleRatio))/2, (height - (int)(height*jugnleRatio))/2);
-        this.jungleUpperRight = new Vector2d((width + (int)(width*jugnleRatio))/2 - 1, (height + (int)(height*jugnleRatio))/2 - 1);
-        this.energyCostOfMove = energyCostOfMove;
-        this.energyFromFood = energyFromFood;
-        this.maxJungleGrass = (int)(width * height * jugnleRatio * jugnleRatio);
+        this.jungleLowerLeft = new Vector2d((width - (int)(width*jungleRatio))/2, (height - (int)(height*jungleRatio))/2);
+        this.jungleUpperRight = new Vector2d((width + (int)(width*jungleRatio))/2 - 1, (height + (int)(height*jungleRatio))/2 - 1);
+        this.moveEnergy = moveEnergy;
+        this.plantEnergy = plantEnergy;
+        this.maxJungleGrass = (int)(width * height * jungleRatio * jungleRatio);
         this.maxSteppeGrass = (width * height) - maxJungleGrass;
     }
 
@@ -88,7 +92,13 @@ public class WorldMap implements IPositionChangeObserver {
     }
 
     private void generateSteppeGrass() {
-        if (this.maxSteppeGrass > 0) {
+        int animalsInSteppe = 0;
+        for (Vector2d position : animalsCords) {
+            if (!belongsToJungle(position)) {
+                animalsInSteppe++;
+            }
+        }
+        if (this.maxSteppeGrass > animalsInSteppe) {
             Vector2d steppeGrassPosition;
             int x, y;
             do {
@@ -102,7 +112,13 @@ public class WorldMap implements IPositionChangeObserver {
     }
 
     private void generateJungleGrass() {
-        if (this.maxJungleGrass > 0) {
+        int animalsInJungle = 0;
+        for (Vector2d position : animalsCords) {
+            if (belongsToJungle(position)) {
+                animalsInJungle++;
+            }
+        }
+        if (this.maxJungleGrass > animalsInJungle) {
             Vector2d jungleGrassPosition;
             int x, y;
             do {
@@ -120,7 +136,7 @@ public class WorldMap implements IPositionChangeObserver {
         generateSteppeGrass();
     }
 
-    public void deleteGrass(Vector2d position) {
+    private void deleteGrass(Vector2d position) {
         this.grassCords.remove(position);
     }
 
@@ -148,9 +164,9 @@ public class WorldMap implements IPositionChangeObserver {
                         finalAnimals.add(animal);
                 }
 
-                int energy = (int)(this.energyFromFood / finalAnimals.size());
+                int energy = (int)(this.plantEnergy / finalAnimals.size());
                 for (Animal animal : finalAnimals) {
-                    animal.energy += energy;
+                    animal.setEnergy(animal.getEnergy() + energy);
                 }
                 this.deleteGrass(position);
 
@@ -166,7 +182,7 @@ public class WorldMap implements IPositionChangeObserver {
     public void deleteDeadAnimals() {
         List<Animal> animalsToRemove = new ArrayList<>();
         for (Animal animal : animalsAndCords) {
-            if (animal.energy <= 0) {
+            if (animal.getEnergy() <= 0) {
                 List<Animal> animals = this.animals.get(animal.getPosition());
 
                 if (animals.size() == 1) {
@@ -182,12 +198,19 @@ public class WorldMap implements IPositionChangeObserver {
         animalsAndCords.removeAll(animalsToRemove);
     }
 
-    public List<Vector2d> getGrassCords() { return grassCords; }
+    public int getWidth() { return this.width; }
 
-    public List<Vector2d> getAnimalsCords() { return animalsCords; }
+    public int getHeight() { return this.height; }
 
-    public List<Animal> getAnimalsAndCords() { return animalsAndCords; }
+    public Vector2d getLowerLeft() { return this.lowerLeft; }
 
-    public Map<Vector2d, List<Animal>> getAnimals() { return animals; }
+    public Vector2d getUpperRight() { return this.upperRight; }
 
+    public List<Vector2d> getGrassCords() { return this.grassCords; }
+
+    public List<Vector2d> getAnimalsCords() { return this.animalsCords; }
+
+    public List<Animal> getAnimalsAndCords() { return this.animalsAndCords; }
+
+    public Map<Vector2d, List<Animal>> getAnimals() { return this.animals; }
 }
