@@ -8,7 +8,7 @@ public class AnimalTest {
 	
 	@Test
 	void testDirection() {
-		WorldMap map = new WorldMap(100, 100, 2, 10, 0.2);
+		WorldMap map = new WorldMap(100, 100, 1000,2, 10, 0.2);
 		
 		Animal animal = new Animal(map, new Vector2d(5, 5), 100);
 		
@@ -72,7 +72,7 @@ public class AnimalTest {
 
 	@Test
 	void testPosition() {
-		WorldMap map = new WorldMap(100, 100, 2, 10, 0.2);
+		WorldMap map = new WorldMap(100, 100, 1000,2, 10, 0.2);
 		Animal animal = new Animal(map, new Vector2d(45, 93), 100);
 		
 		Assertions.assertEquals(new Vector2d(45, 93), animal.getPosition());
@@ -113,7 +113,7 @@ public class AnimalTest {
 
 	@Test
 	void testBorders() {
-		WorldMap map = new WorldMap(100,100, 2, 10, 0.2);
+		WorldMap map = new WorldMap(100,100, 1000, 2, 10, 0.2);
 		
 		Animal animal = new Animal(map, new Vector2d(0,0), 100);
 
