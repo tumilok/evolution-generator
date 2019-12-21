@@ -206,7 +206,7 @@ public class WorldMap implements IPositionChangeObserver {
 
         do {
             direction = direction.next();
-            if (direction == guard) return position;
+            if (direction == guard) new Vector2d(position.add(direction.toUnitVector()).getX() % width, position.add(direction.toUnitVector()).getY() % height);
         }
         while (animals.containsKey(new Vector2d(position.add(direction.toUnitVector()).getX() % width, position.add(direction.toUnitVector()).getY() % height)));
         return new Vector2d(position.add(direction.toUnitVector()).getX() % width, position.add(direction.toUnitVector()).getY() % height);
@@ -238,7 +238,8 @@ public class WorldMap implements IPositionChangeObserver {
                     i++;
                 }
 
-                if (theStrongestAnimal1.getEnergy() > this.startEnergy / 2 && theStrongestAnimal2.getEnergy() > this.startEnergy / 2) {
+                if (theStrongestAnimal1.getEnergy() > theStrongestAnimal1.startEnergy / 2
+                        && theStrongestAnimal2.startEnergy > theStrongestAnimal2.startEnergy / 2) {
                     theStrongestAnimal1.setEnergy(theStrongestAnimal1.getEnergy() *3/4);
                     theStrongestAnimal2.setEnergy(theStrongestAnimal2.getEnergy() *3/4);
                     theStrongestAnimal1.reproduce(theStrongestAnimal2, animalsToAdd);

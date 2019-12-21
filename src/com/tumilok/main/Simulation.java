@@ -10,8 +10,12 @@ public class Simulation {
         this.delay = delay;
 
         for (int i = 0; i < startNumberOfAnimals; i++) {
-            map.place(new Animal(map, new Vector2d((int) (Math.random() * map.getWidth()),
-                    (int) (Math.random() * map.getHeight())), startEnergy));
+            Vector2d position = null;
+            while (position == null || map.isOccupied(position)) {
+                position = new Vector2d((int) (Math.random() * map.getWidth()),
+                        (int) (Math.random() * map.getHeight()));
+            }
+            map.place(new Animal(map, position, startEnergy));
         }
     }
 

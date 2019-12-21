@@ -11,7 +11,8 @@ public class Animal {
 	private WorldMap map;
 	private List<IPositionChangeObserver> observers;
 	private Genes genes;
-	
+	public final int startEnergy;
+
 	public Animal(WorldMap map, Vector2d initialPosition, int startEnergy) {
 		this.direction = MapDirection.NORTH.toMapDirection((int) (Math.random() * 8));
 		this.position = initialPosition;
@@ -19,15 +20,17 @@ public class Animal {
 		this.observers = new ArrayList<>();
 		this.energy = startEnergy;
 		this.genes = new Genes();
+		this.startEnergy = startEnergy;
 	}
 
-	public Animal(WorldMap map, Vector2d initialPosition, int energy, int[] genes) {
+	public Animal(WorldMap map, Vector2d initialPosition, int energy, int[] genes, int startEnergy) {
 		this.direction = MapDirection.NORTH.toMapDirection((int) (Math.random() * 8));
 		this.position = initialPosition;
 		this.map = map;
 		this.observers = new ArrayList<>();
 		this.energy = energy;
 		this.genes = new Genes(genes);
+		this.startEnergy = startEnergy;
 	}
 
 	public String toString() {
@@ -121,7 +124,7 @@ public class Animal {
 		}
 
 		Vector2d babyAnimalPosition = map.choosePositionToPlace(position);
-		Animal babyAnimal = new Animal(map, babyAnimalPosition, (this.energy + Parent.getEnergy())/2, genes);
+		Animal babyAnimal = new Animal(map, babyAnimalPosition, this.energy/4 + Parent.getEnergy()/4, genes, startEnergy);
 		animalsToAdd.add(babyAnimal);
 	}
 
