@@ -68,22 +68,15 @@ public class ReadParameters {
         this.jungleRatio = Double.parseDouble((String) mapObject.get("jungleRatio"));
     }
 
-    public int getWidth() {
-        return width;
-    }
-    public int getHeight() {
-        return height;
-    }
-    public int getStartEnergy() {
-        return startEnergy;
-    }
-    public int getMoveEnergy() {
-        return moveEnergy;
-    }
-    public int getPlantEnergy() {
-        return plantEnergy;
-    }
-    public double getJungleRatio() {
-        return jungleRatio;
-    }
+    public int getWidth() { return this.width; }
+
+    public int getHeight() { return this.height; }
+
+    public int getStartEnergy() { return this.startEnergy; }
+
+    public int getMoveEnergy() { return this.moveEnergy; }
+
+    public int getPlantEnergy() { return this.plantEnergy; }
+
+    public double getJungleRatio() { return this.jungleRatio; }
 }

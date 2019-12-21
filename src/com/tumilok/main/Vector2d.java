@@ -9,7 +9,7 @@ public class Vector2d {
 		this.y = y;
 	}
 
-	public String toString() {
+    public String toString() {
 		return "(" + x + ", " + y + ")";
 	}
 

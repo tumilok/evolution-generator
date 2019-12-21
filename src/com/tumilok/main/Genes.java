@@ -9,34 +9,31 @@ public class Genes {
 
     public Genes() {
         for (int i = 0; i < this.genesNumber; i++) {
-            if (i < 8) {
-                this.genes[i] = i;
-            } else {
-                this.genes[i] = (int) (Math.random() * 8);
-            }
+            this.genes[i] = (int) (Math.random() * 8);
         }
-        Arrays.sort(genes);
+        genesCheck();
     }
 
     public Genes(int []genes) {
-        for (int i = 0; i < this.genesNumber; i++) {
-            this.genes[i] = genes[i];
-         }
+        System.arraycopy(genes, 0, this.genes, 0, genesNumber);
+        genesCheck();
     }
 
-    public String toString() {
-        String toReturn = "";
-        for (int i = 0; i < this.genesNumber; i++) {
-            toReturn += " " + this.genes[i];
+    public String toString() { return Arrays.toString(this.genes); }
+
+    public void genesCheck() {
+        Arrays.sort(genes);
+        for (int i = 0; i < genes.length - 1; i++) {
+            if (genes[i] != genes[i + 1] && genes[i] + 1 != genes[i + 1]) {
+                genes[(int)(Math.random() * genesNumber)] = genes[i] + 1;
+                genesCheck();
+            }
         }
-        return toReturn;
     }
 
     public int chooseDirection() {
         return genes[(int)(Math.random() * 32)];
     }
 
-    public int [] getGenes() {
-        return this.genes;
-    }
+    public int [] getGenes() { return this.genes; }
 }
