@@ -3,10 +3,10 @@
         "map": {
         	"width": "20",
             	"height": "20",
-            	"startEnergy": "1000",
+            	"startEnergy": "500",
 		"moveEnergy": "2",
 		"plantEnergy": "10",
-		"jungleRatio": "0.2"
+		"jungleRatio": "0.3"
         }
     }
 ]
