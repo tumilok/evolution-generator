@@ -5,55 +5,34 @@ import java.util.List;
 
 public class Animal {
 
+	public final int startEnergy;
+	private int energy;
 	private MapDirection direction;
 	private Vector2d position;
-	private int energy;
-	private WorldMap map;
 	private List<IPositionChangeObserver> observers;
+	private WorldMap map;
 	private Genes genes;
-	public final int startEnergy;
+
 
 	public Animal(WorldMap map, Vector2d initialPosition, int startEnergy) {
+		this.startEnergy = startEnergy;
+		this.energy = startEnergy;
 		this.direction = MapDirection.NORTH.toMapDirection((int) (Math.random() * 8));
 		this.position = initialPosition;
-		this.map = map;
 		this.observers = new ArrayList<>();
-		this.energy = startEnergy;
+		this.map = map;
 		this.genes = new Genes();
-		this.startEnergy = startEnergy;
 	}
 
 	public Animal(WorldMap map, Vector2d initialPosition, int energy, int[] genes, int startEnergy) {
+		this.startEnergy = startEnergy;
+		this.energy = energy;
 		this.direction = MapDirection.NORTH.toMapDirection((int) (Math.random() * 8));
 		this.position = initialPosition;
-		this.map = map;
 		this.observers = new ArrayList<>();
-		this.energy = energy;
+		this.map = map;
 		this.genes = new Genes(genes);
-		this.startEnergy = startEnergy;
-	}
 
-	public String toString() {
-		switch(direction) {
-			case NORTH:
-				return "N";
-			case NORTH_EAST:
-				return "NE";
-			case NORTH_WEST:
-				return "NW";
-			case SOUTH:
-				return "S";
-			case SOUTH_EAST:
-				return "SE";
-			case SOUTH_WEST:
-				return "SW";
-			case EAST:
-				return "E";
-			case WEST:
-				return "W";
-			default:
-				return null;
-		}
 	}
 
 	public void changeDirection(){
@@ -62,17 +41,17 @@ public class Animal {
 	}
 
 	private Vector2d bordersCheck(Vector2d moveCords) {
-		if (moveCords.getX() > map.getUpperRight().getX()){
-			moveCords = new Vector2d(map.getLowerLeft().getX(), moveCords.getY());
+		if (moveCords.getX() > map.upperRight.getX()){
+			moveCords = new Vector2d(map.lowerLeft.getX(), moveCords.getY());
 		}
-		if (moveCords.getX() < map.getLowerLeft().getX()){
-			moveCords = new Vector2d(map.getUpperRight().getX(), moveCords.getY());
+		if (moveCords.getX() < map.lowerLeft.getX()){
+			moveCords = new Vector2d(map.upperRight.getX(), moveCords.getY());
 		}
-		if (moveCords.getY() > map.getUpperRight().getY()){
-			moveCords = new Vector2d(moveCords.getX(), map.getLowerLeft().getY());
+		if (moveCords.getY() > map.upperRight.getY()){
+			moveCords = new Vector2d(moveCords.getX(), map.lowerLeft.getY());
 		}
-		if (moveCords.getY() < map.getLowerLeft().getY()){
-			moveCords = new Vector2d(moveCords.getX(), map.getUpperRight().getY());
+		if (moveCords.getY() < map.lowerLeft.getY()){
+			moveCords = new Vector2d(moveCords.getX(), map.upperRight.getY());
 		}
 		return moveCords;
 	}
@@ -96,7 +75,7 @@ public class Animal {
 			divideIndexes[2] = (int) (Math.random() * 30 + 1);
 
 		int [] firstParentGenes = this.getGenesArray();
-		int [] secondParentGenes = this.getGenesArray();
+		int [] secondParentGenes = Parent.getGenesArray();
 
 		int partsFromFirstParent = 0;
 		int partsFromSecondParent = 0;
@@ -130,8 +109,7 @@ public class Animal {
 
 	public boolean equalsByEnergy(Animal other) {
 		if (this != other)
-			if (this.energy == other.energy)
-				return true;
+			return this.energy == other.energy;
 		return false;
 	}
 
@@ -158,22 +136,13 @@ public class Animal {
 
 	public void setEnergy(int energy) {	this.energy = energy; }
 
-	public int getEnergy() {
-		return this.energy;
-	}
+	public int getEnergy() { return this.energy; }
 
-	public MapDirection getDirection() {
-		return this.direction;
-	}
+	public MapDirection getDirection() { return this.direction; }
 
-	public Vector2d getPosition() {
-		return this.position;
-	}
+	public Vector2d getPosition() { return this.position; }
 
-	public int[] getGenesArray() {
-		return this.genes.getGenes();
-	}
+	public int[] getGenesArray() { return this.genes.getGenes(); }
 
 	public Genes getGenes() { return this.genes; }
-
 }

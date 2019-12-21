@@ -4,8 +4,8 @@ import java.util.Arrays;
 
 public class Genes {
 
-    private final int genesNumber = 32;
-    private final int [] genes = new int[genesNumber];
+    public final int genesNumber = 32;
+    private int [] genes = new int[genesNumber];
 
     public Genes() {
         for (int i = 0; i < this.genesNumber; i++) {
@@ -21,7 +21,7 @@ public class Genes {
 
     public String toString() { return Arrays.toString(this.genes); }
 
-    public void genesCheck() {
+    private void genesCheck() {
         Arrays.sort(genes);
         for (int i = 0; i < genes.length - 1; i++) {
             if (genes[i] != genes[i + 1] && genes[i] + 1 != genes[i + 1]) {

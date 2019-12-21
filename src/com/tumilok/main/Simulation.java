@@ -12,19 +12,20 @@ public class Simulation {
         for (int i = 0; i < startNumberOfAnimals; i++) {
             Vector2d position = null;
             while (position == null || map.isOccupied(position)) {
-                position = new Vector2d((int) (Math.random() * map.getWidth()),
-                        (int) (Math.random() * map.getHeight()));
+                position = new Vector2d((int) (Math.random() * map.width),
+                        (int) (Math.random() * map.height));
             }
             map.place(new Animal(map, position, startEnergy));
         }
     }
 
     public void simulateDay() throws InterruptedException {
-        System.out.println((map.toString()));
         while(true) {
+            System.out.println(map.toString());
+
             map.deleteDeadAnimals();
             int i = 1;
-            for (Animal animal : map.getAnimalsAndCords()) {
+            for (Animal animal : map.getListOfAnimals()) {
                 animal.changeDirection();
                 animal.move();
                 System.out.println(i + " " + animal.getEnergy() + " " + animal.getGenes().toString());
@@ -33,7 +34,6 @@ public class Simulation {
             map.eatGrass();
             map.reproduceAnimals();
             map.generateGrass();
-            System.out.println(map.toString());
             Thread.sleep(delay);
         }
     }

@@ -2,9 +2,9 @@ package com.tumilok.main;
 
 public class World {
 
-	ReadParameters readParameters;
-	WorldMap worldMap;
-	Simulation simulation;
+	private ReadParameters readParameters;
+	private WorldMap worldMap;
+	private Simulation simulation;
 
 	public World() {
 		this.readParameters = new ReadParameters();
@@ -16,7 +16,7 @@ public class World {
 		int plantEnergy = readParameters.getPlantEnergy();
 		double jungleRatio = readParameters.getJungleRatio();
 
-		worldMap = new WorldMap(width, height, startEnergy, moveEnergy, plantEnergy, jungleRatio);
+		worldMap = new WorldMap(width, height, moveEnergy, plantEnergy, jungleRatio);
 
 		int startNumberOfAnimals = 20;
 		int delay = 1000;

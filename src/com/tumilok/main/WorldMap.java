@@ -3,13 +3,12 @@ package com.tumilok.main;
 import java.util.*;
 
 public class WorldMap implements IPositionChangeObserver {
-    private final Vector2d lowerLeft;
-    private final Vector2d upperRight;
+    public final Vector2d lowerLeft;
+    public final Vector2d upperRight;
     private final Vector2d jungleLowerLeft;
     private final Vector2d jungleUpperRight;
-    private final int width;
-    private final int height;
-    private final int startEnergy;
+    public final int width;
+    public final int height;
     public final int moveEnergy;
     public final int plantEnergy;
     private int maxSteppeGrass;
@@ -18,18 +17,17 @@ public class WorldMap implements IPositionChangeObserver {
     private List<Vector2d> animalsCords = new ArrayList<>();
     private List<Vector2d> grassCords = new ArrayList<>();
     private Map<Vector2d, List<Animal> > animals = new HashMap<>();
-    private List<Animal> animalsAndCords = new ArrayList<>();
+    private List<Animal> listOfAnimals = new ArrayList<>();
 
     private MapVisualizer picture = new MapVisualizer(this);
 
-    public WorldMap(int width, int height, int startEnergy, int moveEnergy, int plantEnergy, double jungleRatio) {
+    public WorldMap(int width, int height, int moveEnergy, int plantEnergy, double jungleRatio) {
         this.width = width;
         this.height = height;
         this.lowerLeft = new Vector2d(0, 0);
         this.upperRight = new Vector2d(width - 1, height - 1);
         this.jungleLowerLeft = new Vector2d((width - (int)(width*jungleRatio))/2, (height - (int)(height*jungleRatio))/2);
         this.jungleUpperRight = new Vector2d((width + (int)(width*jungleRatio))/2 - 1, (height + (int)(height*jungleRatio))/2 - 1);
-        this.startEnergy = startEnergy;
         this.moveEnergy = moveEnergy;
         this.plantEnergy = plantEnergy;
         this.maxJungleGrass = (int)(width * height * jungleRatio * jungleRatio);
@@ -52,7 +50,7 @@ public class WorldMap implements IPositionChangeObserver {
         tempAnimals.add(animal);
         animals.put(animal.getPosition(), tempAnimals);
         animal.addObserver(this);
-        animalsAndCords.add(animal);
+        listOfAnimals.add(animal);
 
         return true;
     }
@@ -149,7 +147,7 @@ public class WorldMap implements IPositionChangeObserver {
 
                 int i = 0;
                 Animal currentAnimal = animals.get(0);
-                Animal nextAnimal = null;
+                Animal nextAnimal;
                 Animal animalToAdd = currentAnimal;
                 while (i + 1 < animals.size()) {
                     currentAnimal = animals.get(i);
@@ -166,7 +164,7 @@ public class WorldMap implements IPositionChangeObserver {
                         finalAnimals.add(animal);
                 }
 
-                int energy = (int)(this.plantEnergy / finalAnimals.size());
+                int energy = (this.plantEnergy / finalAnimals.size());
                 for (Animal animal : finalAnimals) {
                     animal.setEnergy(animal.getEnergy() + energy);
                 }
@@ -183,7 +181,7 @@ public class WorldMap implements IPositionChangeObserver {
 
     public void deleteDeadAnimals() {
         List<Animal> animalsToRemove = new ArrayList<>();
-        for (Animal animal : animalsAndCords) {
+        for (Animal animal : listOfAnimals) {
             if (animal.getEnergy() <= 0) {
                 List<Animal> animals = this.animals.get(animal.getPosition());
 
@@ -197,7 +195,7 @@ public class WorldMap implements IPositionChangeObserver {
                 animal.removeObserver(this);
             }
         }
-        animalsAndCords.removeAll(animalsToRemove);
+        listOfAnimals.removeAll(animalsToRemove);
     }
 
     public Vector2d choosePositionToPlace(Vector2d position) {
@@ -251,15 +249,7 @@ public class WorldMap implements IPositionChangeObserver {
         }
     }
 
-    public int getWidth() { return this.width; }
-
-    public int getHeight() { return this.height; }
-
-    public Vector2d getLowerLeft() { return this.lowerLeft; }
-
-    public Vector2d getUpperRight() { return this.upperRight; }
-
-    public List<Animal> getAnimalsAndCords() { return this.animalsAndCords; }
+    public List<Animal> getListOfAnimals() { return this.listOfAnimals; }
 
     public Map<Vector2d, List<Animal>> getAnimals() { return this.animals; }
 }

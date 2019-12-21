@@ -9,9 +9,7 @@ public class Vector2d {
 		this.y = y;
 	}
 
-    public String toString() {
-		return "(" + x + ", " + y + ")";
-	}
+    public String toString() { return "(" + x + ", " + y + ")";	}
 
 	public boolean precedes(Vector2d other) {
 		return this.x <= other.x && this.y <= other.y;
