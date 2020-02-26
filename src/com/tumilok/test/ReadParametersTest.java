@@ -10,11 +10,11 @@ public class ReadParametersTest {
     void testReadParameters() {
         ReadParameters read = new ReadParameters();
 
-        Assertions.assertEquals(40, read.getWidth());
-        Assertions.assertEquals(40, read.getHeight());
-        Assertions.assertEquals(100, read.getStartEnergy());
+        Assertions.assertEquals(20, read.getWidth());
+        Assertions.assertEquals(20, read.getHeight());
+        Assertions.assertEquals(500, read.getStartEnergy());
         Assertions.assertEquals(2, read.getMoveEnergy());
         Assertions.assertEquals(10, read.getPlantEnergy());
-        Assertions.assertEquals(0.2, read.getJungleRatio());
+        Assertions.assertEquals(0.3, read.getJungleRatio());
     }
 }

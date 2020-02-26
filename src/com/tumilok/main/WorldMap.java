@@ -55,14 +55,15 @@ public class WorldMap implements IPositionChangeObserver {
         return true;
     }
 
-    public List<Animal> objectAt(Vector2d position) {
+    public List<Animal> objectsAt(Vector2d position) {
         return animals.get(position);
     }
 
     public boolean isOccupied(Vector2d position) {
         for (Vector2d vector2d : this.grassCords) {
-            if (vector2d.equals(position))
+            if (vector2d.equals(position)) {
                 return true;
+            }
         }
         return animals.containsKey(position);
     }
